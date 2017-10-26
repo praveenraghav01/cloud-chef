@@ -1,0 +1,32 @@
+---
+driver:
+  name: ec2
+  aws_ssh_key_id: DemoEFS
+  region: us-east-1
+  availability_zone: f
+  subnet_id: subnet-2a4ec426
+  instance_type: t2.micro
+  image_id: ami-cd0f5cb6
+  security_group_ids: ["sg-8889fbfa"]
+  retryable_tries: 120
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+
+transport:
+  ssh_key: /home/raghav/Desktop/AWS/aws-ubuntu/DemoEFS.pem
+
+platforms:
+  - name: Ubuntu16.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[ubuntu::default]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:
